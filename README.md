@@ -10,10 +10,12 @@
 
 5. The create_email_message function is executed asynchronously in the background to send emails to users. It constructs personalized email messages and passes them to the send_email function for sending.
 
-6. The application integrates with the Gmail API to send emails. It uses the googleapiclient library to build the Gmail service and send emails using OAuth2 authentication.
+7. The application integrates with the Gmail API to send emails. It uses the googleapiclient library to build the Gmail service and send emails using OAuth2 authentication.
 
-7. The application uses environment variables or configuration files (such as token.json) to store sensitive information like Gmail API credentials.
+8. The application uses environment variables or configuration files (such as token.json) to store sensitive information like Gmail API credentials.
 
-8. The Docker Compose file defines a service named 'web', which will build an image using the Dockerfile in the current context and run it.
+9. The Docker Compose file defines a service named 'web', which will build an image using the Dockerfile in the current context and run it.
 
-9. The 'ports' section maps port 80 of the container to port 80 of the host machine, allowing access to the Flask application running inside the container from the host.
+10. The 'ports' section maps port 80 of the container to port 80 of the host machine, allowing access to the Flask application running inside the container from the host.
+11. validate_email will check if the email is valid or not.
+12. Docker compose yml file will run build and run three services- web, redis, rq_worker.
