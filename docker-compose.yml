@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: mail-send
+    ports:
+      - "80:80"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+      - .flaskenv
+    depends_on:
+      - redis
+      
+
+  redis:
+    image: redis:latest
+    container_name: local_redis
+    ports:
+      - "6379:6379"
+
+
+
+  rq_worker:
+    build: .
+    command: sh -c "rq worker -u redis://redis:6379 emails" 
+    depends_on:
+      - web
+    
+
+  

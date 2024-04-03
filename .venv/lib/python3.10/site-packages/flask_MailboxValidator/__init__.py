@@ -1,0 +1,1 @@
+from flask_MailboxValidator.SingleValidation import SingleValidation

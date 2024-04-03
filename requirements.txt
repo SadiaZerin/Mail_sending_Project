@@ -1,0 +1,13 @@
+flask
+flask-smorest
+python-dotenv
+sqlalchemy
+flask-sqlalchemy
+flask-jwt-extended
+passlib
+rq
+redis
+gunicorn
+google-api-python-client
+validate_email==1.3
+py3dns
