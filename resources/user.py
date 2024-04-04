@@ -32,10 +32,6 @@ class UserRegister(MethodView):
         if not is_validate:
             abort(409, message="Email invalid")
         
-
-
-
-
         try:
             with open('token.json', 'r') as token_file:
                 credentials_data = token_file.read()
@@ -56,11 +52,7 @@ class UserRegister(MethodView):
         
             abort(403, message="Invalid or missing Gmail API credentials.")
 
-
-
-
-
-
+        
 
         # Create a new user with the provided email
         user = UserModel(
@@ -87,11 +79,6 @@ class UserRegister(MethodView):
         else:
             abort(409, message="there is no database")
        
-
-
-
-
-
 
 
 @blp.route("/user/<int:user_id>")
