@@ -63,10 +63,10 @@ class UserRegister(MethodView):
         )
 
         if db:
-                
-                    db.session.add(user)
-                    db.session.commit()
+        
                     try:
+                        db.session.add(user)
+                        db.session.commit()
                         current_app.queue.enqueue(
                             create_email_message, user_data["email"], user_data['first_name'], user_data['last_name'],retry=Retry(
                                 max=3,interval=[30,2*3600,6*3600]
@@ -75,7 +75,7 @@ class UserRegister(MethodView):
 
                         return {"message": "User created successfully."}, 201
                     except:
-                        abort(403, message="email sending process fails")
+                        abort(403, message="failed to register user in the database")
        
 
 
