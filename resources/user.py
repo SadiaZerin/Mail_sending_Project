@@ -63,21 +63,19 @@ class UserRegister(MethodView):
         )
 
         if db:
-            
-                db.session.add(user)
-                db.session.commit()
+                
+                    db.session.add(user)
+                    db.session.commit()
+                    try:
+                        current_app.queue.enqueue(
+                            create_email_message, user_data["email"], user_data['first_name'], user_data['last_name'],retry=Retry(
+                                max=3,interval=[30,2*3600,6*3600]
+                            )
+                        )
 
-                current_app.queue.enqueue(
-                    create_email_message, user_data["email"], user_data['first_name'], user_data['last_name'],retry=Retry(
-                        max=3,interval=[30,2*3600,6*3600]
-                    )
-                )
-
-                return {"message": "User created successfully."}, 201
-
-           
-        else:
-            abort(409, message="there is no database")
+                        return {"message": "User created successfully."}, 201
+                    except:
+                        abort(403, message="email sending process fails")
        
 
 
