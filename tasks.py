@@ -14,8 +14,7 @@ load_dotenv()
    
 def create_email_message(email,first_name,last_name):
     
-     
-
+   
             # Create an EmailMessage object
             message = EmailMessage()
             # Set the subject of the email
@@ -33,10 +32,7 @@ def create_email_message(email,first_name,last_name):
             data={'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
             send_email(data)
       
-          
-    
-
-
+      
 def send_email(message):
     # Load credentials from token.json file
     with open('token.json', 'r') as token_file:
