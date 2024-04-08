@@ -64,15 +64,17 @@ class UserRegister(MethodView):
             
             if db:
                 db.session.add(user)
-                db.session.commit()
-                current_app.queue.enqueue(
-                        createAndSend_email_message(user_data["email"], user_data['first_name'], user_data['last_name'])
-                    )
-                if createAndSend_email_message(user_data["email"],user_data['first_name'], user_data['last_name']):
-                    return {"message": "Email sent successfully"}, 201
-                else:
-                    db.session.delete(user)
+                try:
                     db.session.commit()
+                    current_app.queue.enqueue(
+                            create_email_message, user_data["email"], user_data['first_name'], user_data['last_name'],retry=Retry(
+                                max=3,interval=[30,2*3600,6*3600]
+                            )
+                        )
+                    if create_email_message(user_data["email"],user_data['first_name'], user_data['last_name']):
+                        return {"message": "Email sent successfully"}, 201
+                except:
+                    db.session.rollback
                     abort(409, message="An error occurred while sending the email. Try again later")
 
             else:
