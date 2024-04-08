@@ -31,28 +31,18 @@ class UserRegister(MethodView):
             if not is_validate:
                 abort(409, message="Email invalid")
 
-
-            try:
-                with open('token.json', 'r') as token_file:
-                    credentials_data = token_file.read()
-
-                # Check if credentials_data is empty or None
-                if not credentials_data:
-                    # If token.json is empty or missing, raise an exception
-                    raise FileNotFoundError("token.json is empty or missing")
-
-                credentials = Credentials.from_authorized_user_info(json.loads(credentials_data))
-    
-                service = build('gmail', 'v1', credentials=credentials)
+             try:
+                with open('token.json') as token_file:
+                    token_data = json.load(token_file)
+                    if 'https://www.googleapis.com/auth/gmail.send' in token_data.get('scopes', []):
+                        # Gmail API token detected
+                        pass 
+                    else:
+                        # Non-Gmail API token detected
+                        abort(403, message="The provided token does not represent a Gmail API.")
             except FileNotFoundError:
-                    # Handle the case where token.json is empty or missing
-                    abort(403, message="token.json is empty or missing. Please provide valid Gmail API credentials.")
-            except Exception as e:
-                    # Handle any other exceptions that may occur during Gmail service initialization
+                abort(403, message="token.json is empty or missing. Please provide valid Gmail API credentials.")
             
-                    abort(403, message="Invalid or missing Gmail API credentials.")
-
-
 
             # Create a new user with the provided email
             user = UserModel(
